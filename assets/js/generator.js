@@ -149,6 +149,41 @@
       content: ['# Gradle', '.gradle/', 'build/', 'run/', 'out/', '', '# Idea', '.idea/', '*.iml', '', '# macOS', '.DS_Store', ''].join('\n')
     });
     files.push({
+      path: 'run-client.command',
+      mode: 0o755,
+      content: [
+        '#!/bin/sh',
+        '# ' + p.name + ' — boot Minecraft with this mod loaded (macOS / Linux)',
+        'cd "$(dirname "$0")" || exit 1',
+        'if [ ! -f ./gradlew ]; then',
+        '  echo "Generating the Gradle wrapper (one time)…"',
+        '  gradle wrapper --gradle-version 8.10 || { echo "Install Gradle 8.10 and JDK 21 first."; exit 1; }',
+        'fi',
+        'chmod +x ./gradlew 2>/dev/null',
+        './gradlew runClient',
+        ''
+      ].join('\n')
+    });
+    files.push({
+      path: 'run-client.bat',
+      content: [
+        '@echo off',
+        'REM ' + p.name + ' — boot Minecraft with this mod loaded (Windows)',
+        'cd /d "%~dp0"',
+        'if not exist gradlew.bat (',
+        '  echo Generating the Gradle wrapper ^(one time^)...',
+        '  call gradle wrapper --gradle-version 8.10',
+        '  if errorlevel 1 goto fail',
+        ')',
+        'call gradlew.bat runClient',
+        'goto :eof',
+        ':fail',
+        'echo Install Gradle 8.10 and JDK 21 first.',
+        'pause',
+        ''
+      ].join('\r\n')
+    });
+    files.push({
       path: 'README.md',
       content: [
         '# ' + p.name,
@@ -162,6 +197,10 @@
         '- **Generated with:** ModForge',
         '',
         '## Run the game with the mod',
+        '',
+        'Fastest: double-click `run-client.command` (macOS) or `run-client.bat` (Windows).',
+        'It generates the Gradle wrapper on first run and then boots the real client with',
+        'the mod loaded.',
         '',
         '```bash',
         '# one time only, if this project has no wrapper yet',

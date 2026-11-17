@@ -86,7 +86,7 @@
       cv.setUint16(32, 0, true);
       cv.setUint16(34, 0, true);
       cv.setUint16(36, 0, true);
-      cv.setUint32(38, 0, true);
+      cv.setUint32(38, ((entry.mode || 0o644) << 16) >>> 0, true);  // unix permissions
       cv.setUint32(42, offset, true);
       cd.set(nameBytes, 46);
       central.push(cd);
