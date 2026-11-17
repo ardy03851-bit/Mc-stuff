@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ModForge — Minecraft Java Mod Studio for iPad</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ModForge">
+<meta name="description" content="Build, code and preview Minecraft Java mods on iPad. Generate a complete Fabric or NeoForge project and launch a live in-browser preview of your blocks and items.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="assets/css/editor.css">
+<link rel="stylesheet" href="assets/css/preview.css">
+</head>
+<body>
+
+<!-- ─────────────────────────  icon sprite  ───────────────────────── -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="i-build" viewBox="0 0 24 24"><path d="M4 20l6.5-6.5M14.2 3.8l6 6-2.6 2.6-6-6z"/><path d="M8.6 12.2l3.2 3.2"/><path d="M4.2 19.8l1.8-1.8"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5.5v13l11-6.5z"/></symbol>
+    <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 4v10M8.2 10.4L12 14.2l3.8-3.8"/><path d="M5 16.5V19a1 1 0 001 1h12a1 1 0 001-1v-2.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V5h5v2M6.5 7l1 12h9l1-12"/><path d="M10.5 11v4M13.5 11v4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5v-3a1 1 0 00-1-1h-9a1 1 0 00-1 1v9a1 1 0 001 1h3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5"/><path d="M5 19h14"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7.5A1.5 1.5 0 015 6h4l2 2.4h8a1.5 1.5 0 011.5 1.5v8A1.5 1.5 0 0119 19.5H5A1.5 1.5 0 013.5 18z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.5h7l5 5v12H6z"/><path d="M13 3.5v5h5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4.5 17l4.7-4.5 3.4 3.2 2.6-2.3 4.3 4"/></symbol>
+    <symbol id="i-rotate-l" viewBox="0 0 24 24"><path d="M5.5 9.5A7.5 7.5 0 1112 19.5"/><path d="M4.5 4.5v5h5"/></symbol>
+    <symbol id="i-rotate-r" viewBox="0 0 24 24"><path d="M18.5 9.5A7.5 7.5 0 1012 19.5"/><path d="M19.5 4.5v5h-5"/></symbol>
+    <symbol id="i-zoom-in" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20M8 10.5h5M10.5 8v5"/></symbol>
+    <symbol id="i-zoom-out" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20M8 10.5h5"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M7 9.5l3 2.5-3 2.5M12.5 15h4"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z"/><path d="M18.5 16.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3.2l8 4.4v8.8l-8 4.4-8-4.4V7.6z"/><path d="M4 7.6l8 4.4 8-4.4M12 12v8.8"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18.5" cy="12" r="1.4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 11-2.4-5.5"/><path d="M19.8 4.5v4.2h-4.2"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5h-15z"/><path d="M8.5 4.5v5h6v-5M8 19.5v-5h8v5"/></symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="19" height="11" rx="2"/><path d="M6 10h.01M9.5 10h.01M13 10h.01M16.5 10h.01M6 13.5h.01M9.5 13.5h.01M13 13.5h.01M16.5 13.5h.01M8 16.5h8"/></symbol>
+    <symbol id="i-pick" viewBox="0 0 24 24"><path d="M4 20l6.5-6.5M14.2 3.8l6 6-2.6 2.6-6-6z"/><path d="M4.2 19.8l1.8-1.8"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 12V6.5a1.5 1.5 0 013 0V11m0-4.5a1.5 1.5 0 013 0V11m0-3.5a1.5 1.5 0 013 0V14c0 3-2 6-5.5 6S8 17.5 8 15v-2l-1.6-2a1.6 1.6 0 012.3-2.2z"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 4.5H4.5V9M15 4.5h4.5V9M9 19.5H4.5V15M15 19.5h4.5V15"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3"/><path d="M15.5 15.5L20 20"/></symbol>
+  </defs>
+</svg>
+
+<!-- ─────────────────────────  app  ───────────────────────── -->
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><canvas id="brand-cube" width="96" height="96" aria-hidden="true"></canvas></div>
+      <div class="brand-text">
+        <strong>ModForge</strong>
+        <span>Minecraft Java mod studio</span>
+      </div>
+    </div>
+
+    <button class="project-pill" id="project-pill" type="button">
+      <span class="pill-dot" aria-hidden="true"></span>
+      <span class="pill-name" id="pill-name">Emerald Depths</span>
+      <span class="pill-ver" id="pill-version">1.0.0</span>
+      <span class="pill-target" id="pill-target">Fabric · 1.21.1</span>
+    </button>
+
+    <div class="top-actions">
+      <span class="save-state" id="save-state"><i aria-hidden="true"></i><span>Saved</span></span>
+      <button class="btn btn-ghost only-wide" id="btn-top-preview" type="button">
+        <svg class="ic"><use href="#i-play"/></svg><span>Preview</span>
+      </button>
+      <button class="btn btn-primary" id="btn-top-export" type="button">
+        <svg class="ic"><use href="#i-export"/></svg><span>Export</span>
+      </button>
+      <button class="btn btn-icon only-narrow" id="btn-about" type="button" aria-label="About ModForge">
+        <svg class="ic"><use href="#i-info"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <nav class="rail" id="rail" aria-label="Sections">
+      <button class="rail-btn is-on" data-view="build" type="button">
+        <svg class="ic"><use href="#i-build"/></svg><span>Build</span>
+      </button>
+      <button class="rail-btn" data-view="code" type="button">
+        <svg class="ic"><use href="#i-code"/></svg><span>Code</span>
+      </button>
+      <button class="rail-btn" data-view="preview" type="button">
+        <svg class="ic"><use href="#i-play"/></svg><span>Preview</span>
+      </button>
+      <button class="rail-btn" data-view="export" type="button">
+        <svg class="ic"><use href="#i-export"/></svg><span>Export</span>
+      </button>
+      <div class="rail-spacer"></div>
+      <button class="rail-btn rail-mini" id="btn-help" type="button">
+        <svg class="ic"><use href="#i-info"/></svg><span>Guide</span>
+      </button>
+    </nav>
+
+    <main class="stage" id="stage">
+
+      <!-- ═══════════════ BUILD ═══════════════ -->
+      <section class="view view--flex view-build is-on" id="view-build" aria-labelledby="build-h">
+        <div class="view-scroll">
+          <div class="view-head">
+            <div>
+              <h1 id="build-h">Mod builder</h1>
+              <p>Set up your mod, add blocks and items, and ModForge writes a complete Java project.</p>
+            </div>
+            <div class="head-actions">
+              <button class="btn btn-ghost" id="btn-jump-code" type="button">
+                <svg class="ic"><use href="#i-code"/></svg><span>View code</span>
+              </button>
+              <button class="btn btn-primary" id="btn-generate" type="button">
+                <svg class="ic"><use href="#i-spark"/></svg><span>Generate</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="build-grid">
+            <div class="build-col">
+              <section class="card">
+                <header class="card-h">
+                  <h2>Identity</h2>
+                  <span class="hint">Written into fabric.mod.json / neoforge.mods.toml</span>
+                </header>
+                <div class="field-grid">
+                  <label class="field">
+                    <span class="field-label">Mod name</span>
+                    <input class="input" id="f-name" type="text" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Emerald Depths">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Mod id</span>
+                    <span class="input-affix">
+                      <span class="affix">namespace</span>
+                      <input class="input" id="f-modid" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="emerald_depths">
+                    </span>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Version</span>
+                    <input class="input" id="f-version" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="1.0.0">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Author</span>
+                    <input class="input" id="f-author" type="text" autocomplete="off" spellcheck="false" placeholder="Your name">
+                  </label>
+                  <label class="field field--wide">
+                    <span class="field-label">Description</span>
+                    <textarea class="input input--area" id="f-desc" rows="2" spellcheck="false" placeholder="A short description shown on the mod list."></textarea>
+                  </label>
+                  <div class="field">
+                    <span class="field-label">Minecraft version</span>
+                    <div class="seg" id="seg-mc" role="group" aria-label="Minecraft version">
+                      <button class="seg-btn is-on" data-val="1.21.1" type="button">1.21.1</button>
+                      <button class="seg-btn" data-val="1.21.4" type="button">1.21.4</button>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">Loader</span>
+                    <div class="seg" id="seg-loader" role="group" aria-label="Mod loader">
+                      <button class="seg-btn is-on" data-val="fabric" type="button">Fabric</button>
+                      <button class="seg-btn" data-val="neoforge" type="button">NeoForge</button>
+                    </div>
+                  </div>
+                  <label class="field field--wide">
+                    <span class="field-label">Java package</span>
+                    <input class="input input--mono" id="f-package" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="com.example.emerald_depths">
+                  </label>
+                </div>
+              </section>
+
+              <section class="card">
+                <header class="card-h">
+                  <h2>Blocks &amp; items</h2>
+                  <span class="hint" id="content-count">0 registered</span>
+                </header>
+                <div class="content-list" id="content-list"></div>
+                <div class="content-add">
+                  <button class="add-btn" data-add="block" type="button">
+                    <span class="add-icon"><svg class="ic"><use href="#i-plus"/></svg></span>
+                    <span><strong>Block</strong><em>Placeable, with texture + model</em></span>
+                  </button>
+                  <button class="add-btn" data-add="item" type="button">
+                    <span class="add-icon"><svg class="ic"><use href="#i-plus"/></svg></span>
+                    <span><strong>Item</strong><em>Sprite, stack size, tooltip</em></span>
+                  </button>
+                </div>
+              </section>
+            </div>
+
+            <div class="build-col build-col--side">
+              <section class="card card--preview">
+                <header class="card-h">
+                  <h2>Live preview</h2>
+                  <span class="pill-live"><i aria-hidden="true"></i>Realtime</span>
+                </header>
+                <div class="gallery-wrap">
+                  <canvas id="gallery-canvas" aria-label="Preview of the selected block or item"></canvas>
+                  <div class="gallery-caption">
+                    <strong id="gallery-name">Emerald Block</strong>
+                    <span id="gallery-id">emerald_depths:emerald_block</span>
+                  </div>
+                </div>
+                <div class="gallery-strip" id="gallery-strip"></div>
+                <div class="card-foot">
+                  <span class="mini-note">Tap a card to inspect it here.</span>
+                  <button class="btn btn-sm" id="btn-open-world" type="button">
+                    <svg class="ic"><use href="#i-play"/></svg><span>Open world</span>
+                  </button>
+                </div>
+              </section>
+
+              <section class="card">
+                <header class="card-h">
+                  <h2>Project output</h2>
+                  <span class="hint" id="output-count">—</span>
+                </header>
+                <ul class="output-list" id="output-list"></ul>
+                <div class="card-foot">
+                  <span class="mini-note">Java sources, resources, models and textures.</span>
+                  <button class="btn btn-sm btn-ghost" id="btn-open-export" type="button">Export</button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════ CODE ═══════════════ -->
+      <section class="view view--flex view-code" id="view-code" aria-labelledby="code-h">
+        <aside class="file-pane" id="file-pane">
+          <div class="file-head">
+            <h2 id="code-h">Files</h2>
+            <button class="icon-btn" id="btn-add-file" type="button" aria-label="New file">
+              <svg class="ic"><use href="#i-plus"/></svg>
+            </button>
+          </div>
+          <div class="file-scroll" id="file-tree"></div>
+          <div class="file-foot">
+            <button class="btn btn-sm btn-ghost" id="btn-regen-files" type="button">
+              <svg class="ic"><use href="#i-refresh"/></svg><span>Regenerate</span>
+            </button>
+          </div>
+        </aside>
+        <div class="file-scrim" id="file-scrim"></div>
+
+        <section class="editor-pane">
+          <div class="editor-bar">
+            <button class="icon-btn files-toggle" id="btn-files-toggle" type="button" aria-label="Show files">
+              <svg class="ic"><use href="#i-folder"/></svg>
+            </button>
+            <div class="file-path" id="editor-path">—</div>
+            <span class="badge" id="editor-badge">Java</span>
+            <div class="editor-actions">
+              <span class="dirty-dot" id="dirty-dot" hidden aria-label="Unsaved changes"></span>
+              <button class="btn btn-sm btn-ghost" id="btn-editor-menu" type="button" aria-label="File actions">
+                <svg class="ic"><use href="#i-menu"/></svg>
+              </button>
+              <button class="btn btn-sm btn-primary" id="btn-save-file" type="button">
+                <svg class="ic"><use href="#i-save"/></svg><span>Save</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="editor-body" id="editor-body">
+            <div class="gutter" id="gutter"><div class="gutter-inner" id="gutter-inner"></div></div>
+            <div class="code-scroll">
+              <pre class="hl" id="hl" aria-hidden="true"><code id="hl-code"></code></pre>
+              <textarea id="code-input" class="code-input" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off" wrap="off" aria-label="Code editor"></textarea>
+              <div class="binary-pane" id="binary-pane" hidden>
+                <div class="binary-inner">
+                  <canvas id="binary-canvas" width="256" height="256"></canvas>
+                  <div class="binary-meta" id="binary-meta"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-foot">
+            <span id="cursor-pos">Ln 1, Col 1</span>
+            <span id="editor-lint" class="lint ok">Ready</span>
+            <span class="editor-foot-right"><span id="editor-lines">0 lines</span><span>Spaces: 4</span></span>
+          </div>
+          <div class="keybar" id="keybar" hidden>
+            <button type="button" data-key="tab">⇥ tab</button>
+            <button type="button" data-key="{">{</button>
+            <button type="button" data-key="}">}</button>
+            <button type="button" data-key="(">(</button>
+            <button type="button" data-key=")">)</button>
+            <button type="button" data-key="[">[</button>
+            <button type="button" data-key="]">]</button>
+            <button type="button" data-key=";">;</button>
+            <button type="button" data-key='"'>"</button>
+            <button type="button" data-key="'">'</button>
+            <button type="button" data-key="@">@</button>
+            <button type="button" data-key="/">/</button>
+            <button type="button" data-key="=">=</button>
+            <button type="button" data-key="+">+</button>
+            <button type="button" data-key="-"">-</button>
+            <button type="button" data-key="→" class="key-arrow">→</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- ═══════════════ PREVIEW ═══════════════ -->
+      <section class="view view--flex view-preview" id="view-preview" aria-labelledby="preview-h">
+        <div class="mc-stage">
+          <div class="mc-window" id="mc-window">
+            <div class="mc-chrome">
+              <span class="mc-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="mc-chrome-title">
+                <svg class="ic"><use href="#i-cube"/></svg>
+                Minecraft Java Edition
+                <span class="mc-chrome-sep">/</span>
+                <span id="mc-chrome-mod">Emerald Depths</span>
+              </span>
+              <span class="mc-chrome-actions">
+                <button class="chip-btn" id="btn-console-toggle" type="button" aria-pressed="false">
+                  <svg class="ic"><use href="#i-terminal"/></svg><span>Log</span>
+                </button>
+                <button class="chip-btn" id="btn-preview-full" type="button" aria-label="Toggle fullscreen preview">
+                  <svg class="ic"><use href="#i-expand"/></svg>
+                </button>
+              </span>
+            </div>
+
+            <div class="mc-screen" id="mc-screen">
+              <canvas id="mc-sky" class="mc-canvas" aria-hidden="true"></canvas>
+              <canvas id="mc-canvas" class="mc-canvas"></canvas>
+
+              <!-- title screen -->
+              <div class="mc-overlay mc-title-screen" id="mc-title-layer">
+                <div class="mc-logo-wrap">
+                  <canvas class="mc-logo" id="mc-logo" width="900" height="260" aria-label="Minecraft"></canvas>
+                  <div class="mc-subtitle">MODFORGE PREVIEW</div>
+                  <div class="mc-splash" id="mc-splash">Now with your blocks!</div>
+                </div>
+                <div class="mc-menu">
+                  <button class="mc-btn mc-btn--primary" id="mc-play" type="button">Play Preview</button>
+                  <button class="mc-btn" id="mc-gallery" type="button">Mod Gallery</button>
+                  <button class="mc-btn" id="mc-options" type="button">Preview Options</button>
+                </div>
+                <div class="mc-title-foot">
+                  <span id="mc-foot-left">Minecraft 1.21.1</span>
+                  <span class="mc-foot-mid">ModForge preview renderer · not the real client</span>
+                  <span id="mc-foot-right">Fabric · 1.0.0</span>
+                </div>
+              </div>
+
+              <!-- loading -->
+              <div class="mc-overlay mc-loading" id="mc-loading-layer" hidden>
+                <div class="mc-loading-inner">
+                  <canvas class="mc-loading-logo" id="mc-loading-logo" width="900" height="260"></canvas>
+                  <div class="mc-progress"><div class="mc-progress-fill" id="mc-progress"></div></div>
+                  <div class="mc-load-status" id="mc-load-status">Preparing spawn area…</div>
+                </div>
+              </div>
+
+              <!-- world hud -->
+              <div class="mc-overlay mc-hud" id="mc-hud" hidden>
+                <div class="mc-hud-top">
+                  <div class="mc-hud-left">
+                    <div class="mc-world-tag" id="mc-world-tag">Preview world · seed 1337</div>
+                    <div class="mc-inspector" id="mc-inspector" hidden>
+                      <strong id="mc-inspect-name">—</strong>
+                      <span id="mc-inspect-id"></span>
+                      <span id="mc-inspect-pos"></span>
+                    </div>
+                  </div>
+                  <div class="mc-hud-right">
+                    <div class="mc-tool-group">
+                      <button class="mc-iconbtn is-on" data-tool="place" type="button" aria-label="Place block" title="Place">
+                        <svg class="ic"><use href="#i-pick"/></svg>
+                      </button>
+                      <button class="mc-iconbtn" data-tool="break" type="button" aria-label="Break block" title="Break">
+                        <svg class="ic"><use href="#i-trash"/></svg>
+                      </button>
+                      <button class="mc-iconbtn" data-tool="inspect" type="button" aria-label="Inspect block" title="Inspect">
+                        <svg class="ic"><use href="#i-search"/></svg>
+                      </button>
+                    </div>
+                    <div class="mc-tool-group">
+                      <button class="mc-iconbtn" id="mc-rot-l" type="button" aria-label="Rotate left"><svg class="ic"><use href="#i-rotate-l"/></svg></button>
+                      <button class="mc-iconbtn" id="mc-rot-r" type="button" aria-label="Rotate right"><svg class="ic"><use href="#i-rotate-r"/></svg></button>
+                      <button class="mc-iconbtn" id="mc-zoom-out" type="button" aria-label="Zoom out"><svg class="ic"><use href="#i-zoom-out"/></svg></button>
+                      <button class="mc-iconbtn" id="mc-zoom-in" type="button" aria-label="Zoom in"><svg class="ic"><use href="#i-zoom-in"/></svg></button>
+                    </div>
+                    <div class="mc-tool-group">
+                      <button class="mc-iconbtn" id="mc-pause" type="button" aria-label="Back to title"><svg class="ic"><use href="#i-menu"/></svg></button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mc-hint" id="mc-hint">Tap a face to place · choose a block in the hotbar · swipe to rotate</div>
+
+                <div class="mc-hud-bottom">
+                  <div class="mc-label" id="mc-item-label">Emerald Block</div>
+                  <div class="mc-hotbar" id="mc-hotbar" role="listbox" aria-label="Hotbar"></div>
+                  <div class="mc-hud-meta">
+                    <span id="mc-hud-count">0 placed</span>
+                    <span id="mc-hud-fps">—</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- gallery -->
+              <div class="mc-overlay mc-gallery" id="mc-gallery-layer" hidden>
+                <div class="mc-gallery-head">
+                  <div>
+                    <h3>Mod Gallery</h3>
+                    <p id="mc-gallery-sub">Everything this mod registers.</p>
+                  </div>
+                  <button class="mc-btn mc-btn--small" id="mc-gallery-close" type="button">Done</button>
+                </div>
+                <div class="mc-gallery-grid" id="mc-gallery-grid"></div>
+                <div class="mc-gallery-detail" id="mc-gallery-detail">
+                  <div class="mc-gallery-thumb"><canvas id="mc-gallery-canvas" width="200" height="200"></canvas></div>
+                  <div class="mc-gallery-info">
+                    <strong id="mc-gallery-name">—</strong>
+                    <code id="mc-gallery-id">—</code>
+                    <p id="mc-gallery-desc">Select an entry to inspect it.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mc-brandmark">ModForge · simulated preview</div>
+            </div>
+
+            <div class="mc-console" id="mc-console" hidden>
+              <div class="mc-console-head">
+                <span class="mc-console-title"><i></i>Preview log</span>
+                <span class="mc-console-actions">
+                  <button class="chip-btn" id="btn-clear-log" type="button">Clear</button>
+                  <button class="chip-btn" id="btn-hide-log" type="button">Hide</button>
+                </span>
+              </div>
+              <div class="mc-console-body" id="mc-log" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="preview-side">
+          <section class="card">
+            <header class="card-h"><h2>Preview options</h2></header>
+            <div class="opt-row">
+              <span class="opt-label">World seed</span>
+              <div class="opt-actions">
+                <input class="input input--sm input--mono" id="opt-seed" type="text" inputmode="numeric" value="1337" aria-label="World seed">
+                <button class="btn btn-sm" id="btn-reseed" type="button">Re-gen</button>
+              </div>
+            </div>
+            <div class="opt-row">
+              <span class="opt-label">Showcase your blocks</span>
+              <button class="switch" id="opt-showcase" type="button" role="switch" aria-checked="true"><span></span></button>
+            </div>
+            <div class="opt-row">
+              <span class="opt-label">Time of day</span>
+              <div class="seg seg--sm" id="seg-time" role="group" aria-label="Time of day">
+                <button class="seg-btn is-on" data-val="day" type="button">Day</button>
+                <button class="seg-btn" data-val="dusk" type="button">Dusk</button>
+                <button class="seg-btn" data-val="night" type="button">Night</button>
+              </div>
+            </div>
+            <div class="card-foot">
+              <span class="mini-note" id="preview-dirty-note">Preview matches your project.</span>
+              <button class="btn btn-sm btn-primary" id="btn-reload-preview" type="button">
+                <svg class="ic"><use href="#i-play"/></svg><span>Launch</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="card">
+            <header class="card-h"><h2>Run it in Minecraft</h2></header>
+            <p class="card-p">The preview above is a renderer that runs entirely in Safari. To boot the real Java client with your mod loaded, export the project and run:</p>
+            <ol class="steps">
+              <li>
+                <div class="step-text"><strong>Unzip the project</strong><span>Copy it to a computer with JDK 21 installed.</span></div>
+              </li>
+              <li>
+                <div class="step-text"><strong>Boot the client</strong><code class="cmd">./gradlew runClient <button class="cmd-copy" data-copy="./gradlew runClient" type="button"><svg class="ic"><use href="#i-copy"/></svg></button></code></span></div>
+              </li>
+              <li>
+                <div class="step-text"><strong>Or build the jar</strong><code class="cmd">./gradlew build <button class="cmd-copy" data-copy="./gradlew build" type="button"><svg class="ic"><use href="#i-copy"/></svg></button></code><span>Drop <code>build/libs/*.jar</code> into your mods folder.</span></div>
+              </li>
+            </ol>
+            <div class="card-foot">
+              <span class="mini-note">Needs Gradle + a Mojang account to launch.</span>
+              <button class="btn btn-sm" id="btn-export-again" type="button">Download .zip</button>
+            </div>
+          </section>
+
+          <section class="card">
+            <header class="card-h"><h2>Gestures</h2></header>
+            <ul class="gesture-list">
+              <li><span>Tap a face</span><em>Place the selected block</em></li>
+              <li><span>Break tool + tap</span><em>Remove a placed block</em></li>
+              <li><span>Swipe the world</span><em>Rotate 90°</em></li>
+              <li><span>Pinch</span><em>Zoom in / out</em></li>
+              <li><span>Tap hotbar slot</span><em>Pick a block or item</em></li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+
+      <!-- ═══════════════ EXPORT ═══════════════ -->
+      <section class="view view--flex view-export" id="view-export" aria-labelledby="export-h">
+        <div class="view-scroll">
+          <div class="view-head">
+            <div>
+              <h1 id="export-h">Export</h1>
+              <p>Download a ready-to-open Gradle project with your mod's sources, models and textures.</p>
+            </div>
+          </div>
+
+          <div class="export-grid">
+            <section class="card card--hero">
+              <div class="hero-glow" aria-hidden="true"></div>
+              <div class="hero-body">
+                <div class="hero-icon"><svg class="ic"><use href="#i-export"/></svg></div>
+                <h2 id="export-title">emerald_depths-1.0.0.zip</h2>
+                <p id="export-sub">Fabric · Minecraft 1.21.1 · Java 21</p>
+                <div class="stat-row" id="export-stats"></div>
+                <div class="hero-actions">
+                  <button class="btn btn-primary btn-lg" id="btn-download" type="button">
+                    <svg class="ic"><use href="#i-download"/></svg><span>Download project</span>
+                  </button>
+                  <button class="btn btn-ghost btn-lg" id="btn-copy-tree" type="button">
+                    <svg class="ic"><use href="#i-copy"/></svg><span>Copy file list</span>
+                  </button>
+                </div>
+                <p class="hero-note" id="export-note">Everything runs locally in this browser. Nothing is uploaded.</p>
+              </div>
+            </section>
+
+            <section class="card">
+              <header class="card-h"><h2>Commands</h2><span class="hint">Run from the project folder</span></header>
+              <div class="cmd-list" id="cmd-list"></div>
+            </section>
+
+            <section class="card">
+              <header class="card-h"><h2>What's inside</h2><span class="hint" id="export-filecount"></span></header>
+              <ul class="check-list" id="export-check"></ul>
+            </section>
+
+            <section class="card">
+              <header class="card-h"><h2>Project tree</h2><span class="hint">Generated files</span></header>
+              <div class="tree-view" id="export-tree"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</div>
+
+<!-- ─────────────────────────  sheet  ───────────────────────── -->
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+  <div class="sheet-grab" aria-hidden="true"></div>
+  <header class="sheet-head">
+    <h2 id="sheet-title">New block</h2>
+    <button class="icon-btn" id="sheet-close" type="button" aria-label="Close">
+      <svg class="ic"><use href="#i-close"/></svg>
+    </button>
+  </header>
+  <div class="sheet-body" id="sheet-body"></div>
+  <footer class="sheet-foot" id="sheet-foot"></footer>
+</div>
+
+<script src="assets/js/core.js"></script>
+<script src="assets/js/pixels.js"></script>
+<script src="assets/js/iso.js"></script>
+<script src="assets/js/project.js"></script>
+<script src="assets/js/generator.js"></script>
+<script src="assets/js/zip.js"></script>
+<script src="assets/js/editor.js"></script>
+<script src="assets/js/preview.js"></script>
+<script src="assets/js/build.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
