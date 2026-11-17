@@ -1,8 +1,9 @@
 # ModForge — a Minecraft Java mod studio for iPad
 
 A self-contained, touch-first web app for building Minecraft Java mods. Describe your mod,
-watch the Java + JSON + textures get written, preview your blocks in a 3D voxel scene,
-then export a complete Gradle project that runs in the real Java client.
+watch the Java + JSON + textures get written, preview your blocks in a 3D voxel scene, then
+export either a complete Gradle project for the Java client or a `.mcaddon` that installs
+your blocks in the real Minecraft app on iPad, iPhone and consoles.
 
 No build step, no framework, no network requests. It is plain HTML, CSS and JavaScript and
 works offline from the Files app or from any static server.
@@ -17,6 +18,8 @@ assets/js/pixels.js         procedural 16×16 texture generator
 assets/js/iso.js            isometric voxel renderer + item/block icons
 assets/js/project.js        project model & defaults
 assets/js/generator.js      Fabric / NeoForge code + resource generation
+assets/js/bedrock.js        Bedrock add-on (.mcaddon) for the Minecraft app
+assets/js/play.js           the three "real game" routes + install guide
 assets/js/zip.js            dependency-free ZIP writer (store + CRC32)
 assets/js/editor.js         syntax highlighting, file tree, keyboard bar
 assets/js/preview.js        island generator, sky, HUD, touch building
@@ -54,29 +57,59 @@ project regenerates.
 isometric island. Your blocks ring the pond on spawn. Tap a face to place the selected
 block, swipe to rotate, pinch to zoom, switch to break/inspect tools, and open the mod
 gallery. Sky, clouds and stars are drawn procedurally; time of day and world seed are
-configurable.
+configurable. **It is a renderer, not the game** — the title screen says so, and the
+*Play real Minecraft* button sits above it.
 
-**Export** — download `yourmod-1.0.0.zip` with:
+**Export** — two real deliverables:
+
+`yourmod-1.0.0.zip` — the Java mod as a Gradle project:
 
 - `build.gradle`, `settings.gradle`, `gradle.properties`, `.gitignore`, `README.md`
+- `run-client.command` / `run-client.bat` — double-click to boot the client with the mod
 - the mod entry point, `ModBlocks`, `ModItems`, a creative tab and optional tooltip hooks
 - `fabric.mod.json` or `META-INF/neoforge.mods.toml`
 - blockstates, block/item models, `en_us.json`
 - every 16×16 PNG texture plus a 128×128 mod icon
+
+`yourmod-1.0.0.mcaddon` — the same blocks and items as a Bedrock add-on (behaviour pack +
+resource pack), which installs into the real Minecraft app on iPad, iPhone, Android,
+Windows and consoles. Custom blocks use `minecraft:geometry.full_block` with per-face
+`material_instances`; items use the data-driven `minecraft:item` format. Requires
+Minecraft 1.21.80 or newer.
 
 The project is autosaved to `localStorage`; the save indicator in the top bar shows when
 it is written.
 
 ## Getting it into Minecraft
 
-The preview inside the browser is a renderer, not the Java client. To run the real game:
+The window inside the app is a renderer. There are three ways to reach the actual game,
+and the **Play the real game** card offers all of them:
 
-1. Export the zip and unzip it on a computer with JDK 21.
-2. `gradle wrapper --gradle-version 8.10` (one time), then `./gradlew runClient`.
+**1 · Minecraft app — iPad, iPhone, console, Windows** (the only in-game route on iPad)
+
+1. Tap **Download .mcaddon**; Safari saves it to Files → Downloads.
+2. Open the file in Files → Share → **Minecraft**. The game imports two packs.
+3. Create or edit a world → **Add-ons → Behaviour packs → My packs** → activate the pack.
+4. Creative inventory → *Construction* for blocks, *Items* for items.
+
+Minecraft Java Edition needs a JVM and a desktop OpenGL window, so it cannot run on
+iPadOS and no website can start it. The Bedrock add-on is the real-game route there.
+
+**2 · Java Edition — Mac or PC with JDK 21**
+
+1. Unzip the project.
+2. Double-click `run-client.command` (macOS/Linux) or `run-client.bat` (Windows), or run
+   `gradle wrapper --gradle-version 8.10` once and then `./gradlew runClient`.
 3. Or `./gradlew build` and copy `build/libs/*.jar` into `.minecraft/mods`.
 
 Loader/Gradle versions move fast — the generated `README.md` links to the official sites
 for the current versions of the Minecraft release you chose.
+
+**3 · Browser, no install**
+
+The app links to a third-party Java-Edition client (1.8.8 compiled to JavaScript) that
+runs in a tab on any device. It is real Minecraft, but it is not your mod and does not
+run offline.
 
 ## iPad notes
 

@@ -583,3 +583,64 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;hei
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
 }
+
+/* ---------- play the real game ---------- */
+.card--wide{grid-column:1/-1}
+.card--play{border-color:rgba(94,224,138,.26);background:linear-gradient(180deg,rgba(94,224,138,.05),rgba(13,19,27,.9) 42%)}
+.play-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:4px;min-width:0}
+.play-routes.is-compact{grid-template-columns:minmax(0,1fr);gap:10px}
+.play-route{
+  display:flex;flex-direction:column;gap:8px;min-width:0;
+  padding:13px 13px 12px;border-radius:14px;
+  border:1px solid var(--line-2);background:rgba(9,14,20,.6);
+}
+.play-route--primary{border-color:rgba(94,224,138,.34);background:linear-gradient(180deg,rgba(94,224,138,.08),rgba(9,14,20,.7))}
+.play-route-head{display:flex;align-items:center;gap:9px;min-width:0}
+.play-route-ico{
+  flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(94,224,138,.1);border:1px solid rgba(94,224,138,.2);color:var(--green);
+}
+.play-route-ico .ic{width:16px;height:16px}
+.play-route-title{display:flex;flex-direction:column;gap:2px;min-width:0}
+.play-route-title strong{font-size:13.5px;color:var(--text);letter-spacing:-.1px;overflow-wrap:anywhere}
+.play-route-tag{font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--text-3);font-weight:700}
+.play-route-tag.is-live{color:var(--green)}
+.play-route-p{font-size:12px;line-height:1.5;color:var(--text-2);margin:0;overflow-wrap:anywhere}
+.play-actions{display:flex;gap:7px;margin-top:auto;flex-wrap:wrap;min-width:0}
+.play-actions--split .btn{flex:1 1 40%;min-width:0}
+.play-actions .btn{width:100%}
+.play-actions .btn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.play-routes.is-compact .play-actions--split{flex-direction:column}
+.play-routes.is-compact .play-actions--split .btn{width:100%;flex:none}
+.play-route-foot{margin:0;font-size:10.5px;color:var(--text-3);line-height:1.45}
+
+/* ---------- install guide sheet ---------- */
+.guide{display:flex;flex-direction:column;gap:12px}
+.guide-lead{font-size:13.5px;line-height:1.55;color:var(--text-2)}
+.guide-step{display:flex;gap:11px;align-items:flex-start}
+.guide-num{
+  flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-size:11.5px;font-weight:800;color:#06110a;background:var(--green);margin-top:1px;
+}
+.guide-step strong{display:block;font-size:13px;margin-bottom:2px}
+.guide-step p{font-size:12.5px;line-height:1.5;color:var(--text-2);margin:0}
+.guide-callout{
+  margin-top:4px;padding:12px 13px;border-radius:12px;
+  border:1px solid var(--line-2);background:rgba(94,215,212,.06);
+}
+.guide-callout strong{display:block;font-size:12.5px;color:var(--cyan);margin-bottom:4px}
+.guide-callout p{font-size:12px;line-height:1.55;color:var(--text-2);margin:0}
+
+/* responsive play routes — declared after the base rules so it wins */
+@media (max-width:900px), (orientation:portrait){
+  .play-routes{grid-template-columns:minmax(0,1fr)}
+  .play-route{padding:12px}
+}
+@media (max-width:560px){
+  .play-actions--split{flex-direction:column}
+  .play-actions--split .btn{width:100%;flex:none}
+  .brand-text{display:none}
+  .save-state{display:none}
+  .topbar{gap:8px}
+  .project-pill{font-size:13px}
+}

@@ -48,6 +48,9 @@
       onRevert: revertFile
     });
     MF.preview.init(state);
+    MF.play.bind();
+    MF.play.render(qs('#play-routes-preview'), { compact: true });
+    MF.play.render(qs('#play-routes-export'), {});
 
     bindChrome();
     bindGlobal();
@@ -57,7 +60,7 @@
     setView(state.ui.view || 'build', true);
 
     if (!saved) {
-      setTimeout(() => toast('Welcome! Start in Build, then hit Play Preview.', 'info'), 700);
+      setTimeout(() => toast('Welcome! Build a block, then install it in the real game.', 'info'), 700);
     }
     console.log('[ModForge] ready —', report.added, 'files generated');
   }
@@ -267,7 +270,8 @@
       path: f.path,
       content: f.content,
       dataUrl: f.dataUrl,
-      bytes: f.bytes
+      bytes: f.bytes,
+      mode: f.mode
     }));
   }
 
@@ -372,10 +376,15 @@
       '<li><div class="step-text"><strong>Build</strong><span>Name your mod, pick a loader and version, add blocks and items with their own textures.</span></div></li>' +
       '<li><div class="step-text"><strong>Code</strong><span>Every file is generated live: Java, JSON models, lang and textures. Edit anything — your changes are kept when you regenerate.</span></div></li>' +
       '<li><div class="step-text"><strong>Preview</strong><span>A small island is rendered with your blocks in it. Tap faces to place blocks, swipe to rotate, pinch to zoom.</span></div></li>' +
-      '<li><div class="step-text"><strong>Export</strong><span>Download a zip with a complete Gradle project, then run it with Java 21.</span></div></li>' +
+      '<li><div class="step-text"><strong>Export</strong><span>Download the Gradle project for the Java client, or the .mcaddon for the Minecraft app.</span></div></li>' +
       '</ol>' +
-      '<div class="picker-label">About the preview</div>' +
-      '<p class="card-p">The preview is a renderer that runs in Safari: it uses your real texture files, ids and block properties, but it is not the Java client. To see the mod in Minecraft itself, export the project and run <code>./gradlew runClient</code> on a computer with JDK 21, or build a jar and drop it into your mods folder.</p>' +
+      '<div class="picker-label">The preview is not the game</div>' +
+      '<p class="card-p">The Minecraft window is a renderer that runs in Safari. It uses your real textures, ids and block properties, but it is not Minecraft. Three ways to reach the actual game:</p>' +
+      '<ol class="steps">' +
+      '<li><div class="step-text"><strong>Minecraft app (iPad, iPhone, console)</strong><span>Download the <code>.mcaddon</code>, tap it in Files, then activate the packs on a world. Your blocks appear in the creative inventory.</span></div></li>' +
+      '<li><div class="step-text"><strong>Java Edition (computer)</strong><span>Unzip the project on a Mac or PC with JDK 21 and run <code>./gradlew runClient</code> — or double-click <code>run-client.command</code>.</span></div></li>' +
+      '<li><div class="step-text"><strong>Browser</strong><span>A third-party Java-Edition client runs in a tab. Real Minecraft, but not your mod.</span></div></li>' +
+      '</ol>' +
       '<div class="picker-label">Current project</div>' +
       '<p class="card-p"><code>' + escapeHtml(p.modid) + '</code> · ' + escapeHtml(String(p.blocks.length)) + ' blocks · ' + escapeHtml(String(p.items.length)) + ' items · ' + escapeHtml(p.loader) + ' ' + escapeHtml(p.mcVersion) + '<br>Saved automatically on this iPad.</p>';
     const foot = [
@@ -388,6 +397,16 @@
     ];
     MF.sheet.open({ title: 'ModForge guide', body, footer: foot });
   }
+
+  /* public surface used by play.js / console debugging */
+  MF.app = {
+    project: () => state.project,
+    files: () => state.files,
+    downloadProject,
+    setView,
+    regenerate,
+    toast: (m, t) => toast(m, t)
+  };
 
   document.addEventListener('DOMContentLoaded', boot);
 })(window.MF);

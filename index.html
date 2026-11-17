@@ -348,7 +348,8 @@
                   <div class="mc-splash" id="mc-splash">Now with your blocks!</div>
                 </div>
                 <div class="mc-menu">
-                  <button class="mc-btn mc-btn--primary" id="mc-play" type="button">Play Preview</button>
+                  <button class="mc-btn mc-btn--primary" id="mc-real" type="button">Play real Minecraft</button>
+                  <button class="mc-btn" id="mc-play" type="button">Preview in browser</button>
                   <button class="mc-btn" id="mc-gallery" type="button">Mod Gallery</button>
                   <button class="mc-btn" id="mc-options" type="button">Preview Options</button>
                 </div>
@@ -452,6 +453,15 @@
         </div>
 
         <aside class="preview-side">
+          <section class="card card--play">
+            <header class="card-h">
+              <h2>Play the real game</h2>
+              <span class="hint">Not the window</span>
+            </header>
+            <p class="card-p">The Minecraft window is a renderer. These three routes put you in the actual game.</p>
+            <div id="play-routes-preview"></div>
+          </section>
+
           <section class="card">
             <header class="card-h"><h2>Preview options</h2></header>
             <div class="opt-row">
@@ -482,8 +492,8 @@
           </section>
 
           <section class="card">
-            <header class="card-h"><h2>Run it in Minecraft</h2></header>
-            <p class="card-p">The preview above is a renderer that runs entirely in Safari. To boot the real Java client with your mod loaded, export the project and run:</p>
+            <header class="card-h"><h2>Java Edition steps</h2></header>
+            <p class="card-p">On a Mac or PC with JDK 21, the exported project boots the real client with your mod loaded:</p>
             <ol class="steps">
               <li>
                 <div class="step-text"><strong>Unzip the project</strong><span>Copy it to a computer with JDK 21 installed.</span></div>
@@ -520,11 +530,19 @@
           <div class="view-head">
             <div>
               <h1 id="export-h">Export</h1>
-              <p>Download a ready-to-open Gradle project with your mod's sources, models and textures.</p>
+              <p>The Java mod as a ready-to-open Gradle project, or the same blocks as a Bedrock add-on for the Minecraft app.</p>
             </div>
           </div>
 
           <div class="export-grid">
+            <section class="card card--play card--wide">
+              <header class="card-h">
+                <h2>Play the real game</h2>
+                <span class="hint">Three routes, none of them a simulation</span>
+              </header>
+              <div id="play-routes-export"></div>
+            </section>
+
             <section class="card card--hero">
               <div class="hero-glow" aria-hidden="true"></div>
               <div class="hero-body">
@@ -587,10 +605,12 @@
 <script src="assets/js/iso.js"></script>
 <script src="assets/js/project.js"></script>
 <script src="assets/js/generator.js"></script>
+<script src="assets/js/bedrock.js"></script>
 <script src="assets/js/zip.js"></script>
 <script src="assets/js/editor.js"></script>
 <script src="assets/js/preview.js"></script>
 <script src="assets/js/build.js"></script>
+<script src="assets/js/play.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

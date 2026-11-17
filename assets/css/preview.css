@@ -316,7 +316,7 @@
 .mc-log-line .m{flex:1}
 
 /* ---------- side panel ---------- */
-.preview-side{
+.preview-side{min-width:0;
   width:310px;flex:none;min-height:0;overflow-y:auto;
   padding-right:2px;
 }
@@ -357,7 +357,7 @@
   .mc-stage{flex:none;width:100%;aspect-ratio:16/11;max-height:58dvh}
   .mc-window{flex:1}
   .mc-console{height:112px}
-  .preview-side{width:100%;overflow:visible}
+  .preview-side{min-width:0;width:100%;overflow:visible}
   .preview-side .card + .card{margin-top:12px}
   .mc-chrome{height:40px}
   .mc-chrome-title{font-size:11px}
@@ -370,8 +370,18 @@
 @container (max-width: 560px){
   .mc-splash{display:none}
 }
+/* short windows (phones): fit the whole menu without scrolling */
+@container (max-height: 430px){
+  .mc-title-screen{gap:7px;padding:8px 10px}
+  .mc-logo{width:min(54cqw,210px)}
+  .mc-subtitle{font-size:8px;margin-top:-9px;letter-spacing:.5em;text-indent:.5em}
+  .mc-menu{width:min(76cqw,300px);gap:5px}
+  .mc-btn{height:34px;font-size:13px;padding:0 12px}
+  .mc-title-foot{display:none}
+  .mc-splash{display:none}
+}
 @media (max-width:560px){
-  .mc-stage{aspect-ratio:4/3}
+  .mc-stage{aspect-ratio:auto;height:clamp(340px,52dvh,460px)}
   .mc-dots{display:none}
   .mc-chrome{gap:8px}
   .mc-logo{width:78cqw}
